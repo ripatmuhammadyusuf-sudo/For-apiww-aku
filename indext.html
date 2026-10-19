@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spesial Buat Apiw Sayang ❤️</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ff4d6d;
+      --primary-hover: #ff758f;
+      --bg-gradient: linear-gradient(135deg, #ffe6ea 0%, #ffc2d1 50%, #ffe6ea 100%);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --text: #590d22;
+      --shadow: 0 12px 30px rgba(255, 77, 109, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating Background Hearts */
+    .bg-heart {
+      position: fixed;
+      color: rgba(255, 77, 109, 0.25);
+      font-size: 24px;
+      animation: floatUp 7s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg) scale(0.6); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+    }
+
+    /* Layout Responsif */
+    .container {
+      max-width: 900px;
+      width: 100%;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .header-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      padding: 35px 25px;
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .header-card h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.5rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 25px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card h2 {
+      font-size: 1.25rem;
+      color: #800f2f;
+      margin-bottom: 18px;
+    }
+
+    /* Mood Buttons */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .mood-btn {
+      background: white;
+      border: 2px solid #ffccd5;
+      padding: 14px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+
+    .mood-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      border-color: var(--primary);
+      background: #fff0f3;
+    }
+
+    #mood-response {
+      margin-top: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      min-height: 28px;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    /* 3D Flip Cards */
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .flip-card {
+      height: 130px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .flip-card-front {
+      background: linear-gradient(135deg, #ff758f, #ff4d6d);
+      color: white;
+    }
+
+    .flip-card-back {
+      background: #ffffff;
+      color: var(--text);
+      border: 2px solid #ff4d6d;
+      transform: rotateY(180deg);
+    }
+
+    /* Tombol Pertanyaan Interaktif (Iya / Tidak) */
+    .interactive-box {
+      margin-top: 10px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .btn-yes {
+      background: #2ec4b6;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(46, 196, 182, 0.4);
+      transition: transform 0.2s ease, background 0.2s ease;
+      z-index: 2;
+    }
+
+    .btn-yes:hover {
+      background: #20a39e;
+      transform: scale(1.1);
+    }
+
+    .btn-no {
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+      position: relative;
+      transition: all 0.15s ease-out;
+      z-index: 10;
+    }
+
+    #interactive-result {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.05rem;
+      margin-top: 10px;
+    }
+
+    /* Surat Rahasia */
+    .letter-btn {
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 30px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+      transition: all 0.3s ease;
+      align-self: center;
+    }
+
+    .letter-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 25px rgba(255, 77, 109, 0.6);
+    }
+
+    #letter-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.8s cubic-bezier(0, 1, 0, 1);
+      background: white;
+      border-radius: 20px;
+      margin-top: 18px;
+      text-align: left;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      border: 2px dashed #ff758f;
+    }
+
+    #letter-content.open {
+      max-height: 600px;
+      padding: 25px;
+      transition: max-height 0.8s ease-in-out;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #800f2f;
+      font-weight: 600;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Hearts -->
+  <div id="hearts-container"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header-card">
+      <h1 id="greeting">Halo Apiw Sayang! ❤️</h1>
+      <p style="font-size: 0.95rem; color: #a4133c;">Web interaktif ini khusus Aku buat cuma untuk Apiw.</p>
+    </div>
+
+    <div class="grid-2">
+      <!-- Mood Tracker -->
+      <div class="card">
+        <h2>Bagaimana perasaan Apiw hari ini? 💭</h2>
+        <div class="mood-grid">
+          <button class="mood-btn" onclick="selectMood('Happy 🥰')">Happy 🥰</button>
+          <button class="mood-btn" onclick="selectMood('Kangen 🥺')">Kangen 🥺</button>
+          <button class="mood-btn" onclick="selectMood('Capek 😮‍💨')">Capek 😮‍💨</button>
+          <button class="mood-btn" onclick="selectMood('Sedih 😢')">Sedih 😢</button>
+        </div>
+        <div id="mood-response"></div>
+      </div>
+
+      <!-- 3D Flip Cards -->
+      <div class="card">
+        <h2>Kenapa Apiw Selalu Spesial ✨</h2>
+        <p style="font-size: 0.82rem; margin-bottom: 14px; color: #a4133c;">(Klik/Sentuh kartu untuk membaca pesan)</p>
+        <div class="flip-grid">
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">Kartu 1 💌</div>
+              <div class="flip-card-back">Apiw itu tempat pulang paling nyaman buat Aku.</div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">Kartu 2 💖</div>
+              <div class="flip-card-back">Senyum Apiw selalu bikin hari Aku jadi terang.</div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">Kartu 3 🌸</div>
+              <div class="flip-card-back">Alasan Aku semangat setiap hari itu ya Apiw.</div>
+            </div>
+          </div>
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">Kartu 4 💍</div>
+              <div class="flip-card-back">Masa depan yang mau Aku tuju cuma sama Apiw.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fitur Tombol Kabur (Iya / Tidak) -->
+    <div class="card">
+      <h2>Apiw Sayang Sama Aku Nggak? 🥺💖</h2>
+      <div class="interactive-box">
+        <div class="btn-group">
+          <button class="btn-yes" onclick="answerYes()">Iya, Sayang Banget! 🥰</button>
+          <button class="btn-no" id="btn-no" onmouseover="moveNoBtn()" onclick="moveNoBtn()" ontouchstart="moveNoBtn()">Enggak 😜</button>
+        </div>
+        <div id="interactive-result"></div>
+      </div>
+    </div>
+
+    <!-- Surat Rahasia -->
+    <div class="card">
+      <h2>Pesan Spesial Hari Ini ✉️</h2>
+      <button class="letter-btn" onclick="toggleLetter()">Buka Pesan dari Aku 💕</button>
+      <div id="letter-content">
+        <p><strong>Halo Apiw Sayang,</strong></p><br>
+        <p>Makasih ya sudah selalu ada dan jadi bagian paling berharga di hidup Aku. Apiw jangan pernah merasa sendiri ya, karena kapan pun Apiw butuh tempat bersandar atau cerita, Aku selalu siap ada buat Apiw.</p><br>
+        <p>Tetap semangat jalani hari ini ya, cintaku! Jangan lupa makan dan istirahat yang cukup. I love you so much, Apiw! ❤️</p>
+      </div>
+    </div>
+
+    <footer>
+      Dibuat dengan penuh rasa sayang khusus untuk Apiw ❤️
+    </footer>
+  </div>
+
+  <script>
+    // ==========================================
+    // KONFIGURASI TELEGRAM BOT
+    // ==========================================
+    const TELEGRAM_BOT_TOKEN = '1234567890:ABCdefGHIjklMNOpqrSTUvwxYZ'; // Ganti Token Bot Telegram Kamu
+    const TELEGRAM_CHAT_ID = '987654321';                       // Ganti Chat ID Telegram Kamu
+
+    // Background Hearts
+    const heartsContainer = document.getElementById('hearts-container');
+    const heartSymbols = ['❤️', '💖', '💕', '🌸', '✨'];
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'bg-heart';
+      heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 4 + 5) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      heartsContainer.appendChild(heart);
+    }
+
+    // Salam Otomatis
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const greetingEl = document.getElementById('greeting');
+      if (hour < 11) greetingEl.textContent = "Selamat Pagi Apiw Sayang! ☀️";
+      else if (hour < 15) greetingEl.textContent = "Selamat Siang Apiw Sayang! 🌤️";
+      else if (hour < 18) greetingEl.textContent = "Selamat Sore Apiw Sayang! 🌆";
+      else greetingEl.textContent = "Selamat Malam Apiw Sayang! 🌙";
+    }
+    updateGreeting();
+
+    // Respons Mood
+    function selectMood(mood) {
+      const responseEl = document.getElementById('mood-response');
+      let reply = "";
+
+      if (mood.includes('Happy')) reply = "Aku ikut seneng banget kalau Apiw bahagia hari ini! Tetap tersenyum ya sayang 🥰";
+      else if (mood.includes('Kangen')) reply = "Aku juga kangen banget sama Apiw! Nanti kita ngobrol ya 🥺❤️";
+      else if (mood.includes('Capek')) reply = "Istirahat dulu ya cintaku. Jangan dipaksain, Aku selalu ada di samping Apiw 🫂";
+      else if (mood.includes('Sedih')) reply = "Jangan sedih ya sayang... Ada Aku di sini. Cerita ke Aku kalau Apiw udah siap 💖";
+
+      responseEl.textContent = reply;
+
+      confetti({
+        particleCount: 65,
+        spread: 70,
+        origin: { y: 0.7 }
+      });
+
+      kirimKeTelegram(`Mood Apiw: ${mood}`);
+    }
+
+    // Function Tombol Kabur "Enggak"
+    function moveNoBtn() {
+      const btnNo = document.getElementById('btn-no');
+      
+      // Hitung batas area acak
+      const x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 100) - (window.innerWidth / 2 - 100);
+      const y = Math.random() * 200 - 100;
+
+      btnNo.style.position = 'relative';
+      btnNo.style.left = `${x}px`;
+      btnNo.style.top = `${y}px`;
+    }
+
+    // Function Tombol "Iya"
+    function answerYes() {
+      const resultEl = document.getElementById('interactive-result');
+      resultEl.textContent = "Makasih Apiw sayang! Aku juga sayang bangeet sama Apiw! 🥰❤️✨";
+      
+      // Efek Pesta Konfeti Meriah
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
+      kirimKeTelegram("Apiw menjawab: Iya, Sayang Banget! 🥰");
+    }
+
+    function kirimKeTelegram(pesanText) {
+      if (TELEGRAM_BOT_TOKEN === '8819158427:AAE5czRVA_lc6APW8QEs8sU13oPMpMkirKQ') return;
+
+      const pesan = `💖 *Update Interaktif Apiw!*\n\n${pesanText}`;
+
+      fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID = '2142248329',
+          text: pesan,
+          parse_mode: 'Markdown'
+        })
+      }).catch(err => console.error(err));
+    }
+
+    // Flip Card Action
+    function flipCard(card) {
+      card.classList.toggle('flipped');
+      confetti({
+        particleCount: 25,
+        spread: 50,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Surat Rahasia
+    function toggleLetter() {
+      const letter = document.getElementById('letter-content');
+      letter.classList.toggle('open');
+      if (letter.classList.contains('open')) {
+        confetti({
+          particleCount: 100,
+          spread: 90,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
